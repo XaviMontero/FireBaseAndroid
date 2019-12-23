@@ -152,7 +152,8 @@
         android:background="@drawable/half_blue_roundshape"
         android:text="Huella Digital"
         android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/cardView" />
+        app:layout_constraintTop_toBottomOf="@id/cardView"
+        tools:ignore="MissingConstraints" />
 
     <View
         android:id="@+id/vHorizontalLine"

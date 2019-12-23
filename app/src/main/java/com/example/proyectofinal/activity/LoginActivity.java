@@ -17,9 +17,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectofinal.R;
+import com.example.proyectofinal.model.User;
 import com.example.proyectofinal.util.Util;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -28,7 +30,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,8 +38,13 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.concurrent.Executor;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+import io.realm.Realm;
+import io.realm.RealmResults;
 
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+    private TextView registrar;
+    private User userReaml;
+    private Realm realm =Realm.getDefaultInstance();
     private Button biometricLoginButton;
     private Handler handler = new Handler();
     private Executor executor = new Executor() {
@@ -48,7 +54,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     };
     private SharedPreferences prefs;
-
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Switch switchRemember;
@@ -94,9 +99,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btnLogin.setOnClickListener(this);
         ivFacebook.setOnClickListener(this);
+        registrar.setOnClickListener(this);
     }
 
     private void call() {
+        userReaml= new User();
         biometricLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,6 +124,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLogin =  findViewById(R.id.login);
         ivFacebook = findViewById(R.id.ivFacebook);
         mAuth = FirebaseAuth.getInstance();
+        registrar= findViewById(R.id.tvSignUp);
 
     }
 
@@ -190,25 +198,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private boolean login(String email, String password) {
         if (!isValidEmail(email)) {
-            Toast.makeText(this, "Email is not valid, please try again", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "email incorrecto", Toast.LENGTH_LONG).show();
             return false;
         } else if (!isValidPassword(password)) {
-            Toast.makeText(this, "Password is not valid, 4 characters or more, please try again", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Password Mayor que 4 caracteres", Toast.LENGTH_LONG).show();
             return false;
         } else {
-            return true;
+
+            RealmResults<User> result2 = realm.where(User.class)
+                    .equalTo("name", email)
+                    .and()
+                    .equalTo("pass", password)
+                    .findAll();
+            if(result2.size()==0){
+                Toast.makeText(this, "NO existe un usuario con esos caracteres Registrate ", Toast.LENGTH_LONG).show();
+                return false;
+            }else{
+                return true;
+            }
+
+
         }
     }
 
     private void saveOnPreferences(String email, String password) {
-        if (switchRemember.isChecked()) {
+
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("email", email);
             editor.putString("pass", password);
             editor.apply();
 
 
-        }
     }
 
     private boolean isValidEmail(String email) {
@@ -241,8 +261,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.ivFacebook:
                 signIn();
                 break;
+            case R.id.tvSignUp:
+                signUp();
+                break;
         }
 
+    }
+
+    private void signUp() {
+        Intent intent = new Intent(this, UserActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     //Fin de inicio de secion
@@ -300,8 +329,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            saveOnPreferences(user.getEmail(), user.getUid());
-                            goToMain();
+                            if (login(user.getEmail(), user.getUid())) {
+                                saveOnPreferences(user.getEmail(), user.getUid());
+                                goToMain();
+
+                            }else{
+                                userReaml.setId(contador());
+                                userReaml.setName(user.getEmail());
+                                userReaml.setPass(user.getUid());
+                                userReaml.setNombre(user.getDisplayName());
+                                realm.beginTransaction();
+                                realm.insert(userReaml);
+                                realm.commitTransaction();
+                                goToMain();
+                            }
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -316,6 +358,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
     // [END auth_with_google]
 
+    private long contador() {
+        RealmResults<User> result2 = realm.where(User.class).findAll();
+        return result2.size()+1;
+    }
 
 
 
