@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ucacue"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ListActivity"></activity>
+        <activity android:name=".activity.ListClienteActivity"></activity>
+        <activity android:name=".activity.ClienteActivity" />
+        <activity android:name=".activity.ListActivity" />
         <activity android:name=".activity.UserActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity

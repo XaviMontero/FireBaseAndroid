@@ -1,7 +1,6 @@
-package com.example.proyectofinal;
+package com.example.proyectofinal.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -10,13 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.proyectofinal.R;
 import com.example.proyectofinal.model.Producto;
 import com.squareup.picasso.Picasso;
 

@@ -10,33 +10,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.proyectofinal.MainAdapter;
+import com.example.proyectofinal.adapter.MainAdapter;
 import com.example.proyectofinal.R;
 import com.example.proyectofinal.model.Producto;
 import com.example.proyectofinal.model.User;
 import com.example.proyectofinal.util.Util;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Console;
-import java.util.AbstractQueue;
 import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private User userReaml;
     private Realm realm =Realm.getDefaultInstance();
@@ -50,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Producto> list_usuarios = new ArrayList<Producto>();
     private RecyclerView recyclerView;
     public MainAdapter mainAdapter;
-
+    private Double total = 0.0;
+    private FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,13 +134,16 @@ public class MainActivity extends AppCompatActivity {
         mainAdapter = new MainAdapter(list_usuarios, R.layout.card_view, this, new MainAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Producto fruit, int position) {
-                        Toast.makeText(getApplicationContext(),"Producto agregado su id  "+fruit.getId(), Toast.LENGTH_LONG).show();
+                total =total+fruit.getPrecio();
+                Toast.makeText(getApplicationContext(),"Producto agregado al carrito  "+fruit.getNombre()+""+ "total es "+ total, Toast.LENGTH_LONG).show();
             }
         });
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mainAdapter);
+        fab= findViewById(R.id.floatingActionButton2);
+        fab.setOnClickListener(this);
     }
 
     private User getUser(String email) {
@@ -173,10 +175,18 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_usuarios:
                 usuariosActivity();
                 return true;
+            case R.id.menu_cliente:
+                clienteActivity();
+                return  true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void clienteActivity() {
+        Intent intent = new Intent(this, ListClienteActivity.class);
+        startActivity(intent);
     }
 
     private void cerrar() {
@@ -195,5 +205,19 @@ public class MainActivity extends AppCompatActivity {
     private void usuariosActivity() {
         Intent intent = new Intent(this, ListActivity.class);
          startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+         if(total!= 0.0){
+             Intent myIntent = new Intent(this, ClienteActivity.class);
+             myIntent.putExtra("total",total);
+             startActivity(myIntent);
+            total =0.0;
+
+         } else{
+             Toast.makeText(getApplicationContext(),"No a ingresado nigun producto al carrito", Toast.LENGTH_LONG).show();
+
+         }
     }
 }

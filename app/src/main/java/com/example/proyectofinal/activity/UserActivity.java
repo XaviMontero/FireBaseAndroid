@@ -52,7 +52,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.save:
                 if(passConfirm.getText().toString().equals(pass.getText().toString()) && usuario.length()>=5){
-                        if(login(nombre.getText().toString(),pass.getText().toString())){
+                        if(login(nombre.getText().toString(),pass.getText().toString()) ){
                             user.setId(contador());
                             user.setName(nombre.getText().toString());
                             user.setPass(pass.getText().toString());
@@ -64,7 +64,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                         }
 
                 } else {
-                    Toast.makeText(this,"La contraseña no coincide  y el nombre debe tener 5 caracteres o mas ",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,"La contraseña no coincide  y el nombre debe tener 5 caracteres o mas  o el usuario ya existe",Toast.LENGTH_LONG).show();
                 }
                 break;
                 default:
@@ -95,6 +95,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     private boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
+
+
 
     private boolean isValidPassword(String password) {
         return password.length() >= 4;
