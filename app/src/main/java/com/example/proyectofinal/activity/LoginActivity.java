@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -157,10 +158,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 BiometricPrompt.CryptoObject authenticatedCryptoObject =
                         result.getCryptoObject();
 
-                Toast.makeText(getApplicationContext(), "Bienvenido",
-                        Toast.LENGTH_SHORT)
-                        .show();
-                goToMain();
+
+                if (login("admin@admin.ec", "admin")) {
+                    saveOnPreferences("admin@admin.ec", "admin");
+                    goToMain();
+
+                }else{
+                    userReaml.setId(contador());
+                    userReaml.setName("admin@admin.ec");
+                    userReaml.setPass("admin");
+                    userReaml.setNombre("Administrador ");
+                    realm.beginTransaction();
+                    realm.insert(userReaml);
+                    realm.commitTransaction();
+
+                    Toast.makeText(getApplicationContext(), "Cuenta de administrador creada ",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+
+
+
                 // User has verified the signature, cipher, or message
                 // authentication code (MAC) associated with the crypto object,
                 // so you can use it in your app's crypto-driven workflows.
@@ -341,7 +359,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 realm.beginTransaction();
                                 realm.insert(userReaml);
                                 realm.commitTransaction();
-                                goToMain();
+                                Toast.makeText(getApplicationContext(), "Cuenta de Google  creada ",
+                                        Toast.LENGTH_SHORT)
+                                        .show();
                             }
 
                         } else {

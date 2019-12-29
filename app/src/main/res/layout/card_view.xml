@@ -9,6 +9,8 @@
     app:cardCornerRadius="8dp"
     app:cardElevation="10dp"
     android:id="@+id/card_view_lis"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
    >
 
 

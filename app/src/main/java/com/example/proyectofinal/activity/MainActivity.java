@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;// ...
     private RecyclerView.LayoutManager layoutManager;
 
-
     private ArrayList<Producto> list_usuarios = new ArrayList<Producto>();
     private RecyclerView recyclerView;
     public MainAdapter mainAdapter;
@@ -55,33 +54,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mDatabase = FirebaseDatabase.getInstance().getReference("productos");
 
 
 
 
-       producto=new Producto();
+    /*   producto=new Producto();
         producto.setId("skjghjgfkjljhugfbf");
         producto.setDescripcion("Caldo Magui para las sopas de familia  ");
         producto.setNombre("Caldo magi ");
         producto.setUrl("https://www.nestle.com.ve/sites/g/files/pydnoa526/files/asset-library/publishingimages/productos/maggi/productos/cubito%20de%20pollo%2092g_3-4.jpg");
         producto.setPrecio(0.5);
-        mDatabase.child(producto.getId()).setValue(producto);
-
-
-
-
-
-
+        mDatabase.child(producto.getId()).setValue(producto);*/
 
 
         setContentView(R.layout.activity_main);
+
         userReaml= new User();
         textView = findViewById(R.id.user_main);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         email = Util.getUserMailPrefs(prefs);
         userReaml= getUser(email);
         textView.setText("Binvenido: "+userReaml.getNombre());
+
 
         ValueEventListener userListener = new ValueEventListener() {
             @Override
@@ -139,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         mainAdapter = new MainAdapter(list_usuarios, R.layout.card_view, this, new MainAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Producto fruit, int position) {
-
+                        Toast.makeText(getApplicationContext(),"Producto agregado su id  "+fruit.getId(), Toast.LENGTH_LONG).show();
             }
         });
 
