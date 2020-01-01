@@ -10,6 +10,7 @@ public class Cliente extends RealmObject {
     private String direccion;
     private String telefono;
 
+
     public Cliente() {
     }
 

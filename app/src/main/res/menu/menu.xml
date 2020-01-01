@@ -13,7 +13,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_productos"
-        android:title="Productos "
+        android:title="Facturas "
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_pedidos"

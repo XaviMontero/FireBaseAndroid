@@ -3,6 +3,8 @@
     package="com.example.proyectofinal">
 
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".app.MyApp"
@@ -12,7 +14,9 @@
         android:roundIcon="@mipmap/ucacue"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ListClienteActivity"></activity>
+        <activity android:name=".activity.PagosActivity" />
+        <activity android:name=".activity.MapasActivity" />
+        <activity android:name=".activity.ListClienteActivity" />
         <activity android:name=".activity.ClienteActivity" />
         <activity android:name=".activity.ListActivity" />
         <activity android:name=".activity.UserActivity" />

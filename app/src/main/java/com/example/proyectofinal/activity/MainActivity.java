@@ -178,10 +178,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_cliente:
                 clienteActivity();
                 return  true;
+            case R.id.menu_pedidos:
+                mapas();
+
+                return true;
+            case R.id.menu_productos:
+                pagos();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void pagos() {
+        Intent intent = new Intent(this, PagosActivity.class);
+        startActivity(intent);
+    }
+
+    private void mapas() {
+        Intent intent = new Intent(this, MapasActivity.class);
+        startActivity(intent);
     }
 
     private void clienteActivity() {

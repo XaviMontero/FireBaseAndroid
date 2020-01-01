@@ -1,9 +1,19 @@
 package com.example.proyectofinal.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +24,13 @@ import com.example.proyectofinal.R;
 import com.example.proyectofinal.model.Cliente;
 import com.example.proyectofinal.model.Pago;
 import com.example.proyectofinal.model.User;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -29,6 +46,12 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
     private Button registrarSiguiente;
     private Cliente cliente;
     private Double total;
+    private Double latitud;
+    private Double logitud;
+
+
+    int PERMISSION_ID = 44;
+    FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +59,8 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_cliente);
         referencia();
         clik();
+
+        getLastLocation();
 
     }
 
@@ -55,6 +80,8 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
         Intent myIntent = getIntent(); // gets the previously created intent
         total = myIntent.getDoubleExtra("total",0.0);
         totales= findViewById(R.id.totales);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
 
     }
 
@@ -62,6 +89,7 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.siguiente:
+                if(validLatiLogit()){
                 if(buscarCliente(cedulaCliente.getText().toString())){
                    Cliente clienteGuardar = new Cliente();
                    clienteGuardar.setCedula(cedulaCliente.getText().toString());
@@ -75,20 +103,43 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
                             Toast.LENGTH_SHORT)
                             .show();
                     Pago pago = new Pago();
+                         pago.setId(contador());
                         pago.setCedula(cedulaCliente.getText().toString());
                         pago.setTotal(total);
-                    Toast.makeText(getApplicationContext(), "Pago Con exito total es  " +total,
+                        pago.setLatitud(latitud);
+                        pago.setLongitud(logitud);
+                        realm.beginTransaction();
+                        realm.insert(pago);
+                        realm.commitTransaction();
+                    Toast.makeText(getApplicationContext(), "Pago Con exito total es  " +latitud+" "+logitud,
                             Toast.LENGTH_SHORT)
                             .show();
                     goToCompras();
                 }else{
+                    Toast.makeText(getApplicationContext(), "Error con Logitud  y latitud  " ,
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+                }else{
+                    if(validLatiLogit()){
                     Pago pago = new Pago();
+                    pago.setId(contador());
                     pago.setCedula(cedulaCliente.getText().toString());
                     pago.setTotal(total);
-                    Toast.makeText(getApplicationContext(), "Pago Con exito total es  " +total,
+                    pago.setLatitud(latitud);
+                    pago.setLongitud(logitud);
+                    realm.beginTransaction();
+                    realm.insert(pago);
+                    realm.commitTransaction();
+                    Toast.makeText(getApplicationContext(), "Pago Con exito total es  " +total +latitud+" "+logitud,
                             Toast.LENGTH_SHORT)
                             .show();
                     goToCompras();
+                }else{
+                        Toast.makeText(getApplicationContext(), "Error con Logitud  y latitud  " ,
+                                Toast.LENGTH_SHORT)
+                                .show();
+                    }
                 }
                 break;
             case R.id.etBuscar:
@@ -98,6 +149,15 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
 
         }
 
+    }
+
+    private boolean validLatiLogit() {
+        if(latitud!= null &&logitud!=null)
+        {
+            return  true;
+        }else{
+            return false;
+        }
     }
 
     private void goToCompras() {
@@ -125,5 +185,113 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
 
 
         return result2.size() == 0;
+    }
+
+
+    //Get Location
+
+    @SuppressLint("MissingPermission")
+    private void getLastLocation(){
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+                mFusedLocationClient.getLastLocation().addOnCompleteListener(
+                        new OnCompleteListener<Location>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Location> task) {
+                                Location location = task.getResult();
+                                if (location == null) {
+                                    requestNewLocationData();
+                                } else {
+                                        latitud= location.getLatitude();
+                                        logitud=location.getLongitude();
+                                   /* latTextView.setText(location.getLatitude()+"");
+                                    lonTextView.setText(location.getLongitude()+"");*/
+                                }
+                            }
+                        }
+                );
+            } else {
+                Toast.makeText(this, "Turn on location", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        } else {
+            requestPermissions();
+        }
+    }
+
+
+    @SuppressLint("MissingPermission")
+    private void requestNewLocationData(){
+
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(0);
+        mLocationRequest.setFastestInterval(0);
+        mLocationRequest.setNumUpdates(1);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient.requestLocationUpdates(
+                mLocationRequest, mLocationCallback,
+                Looper.myLooper()
+        );
+
+    }
+
+    private LocationCallback mLocationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            Location mLastLocation = locationResult.getLastLocation();
+
+
+          /* totales.setText(mLastLocation.getLatitude()+"");
+              lonTextView.setText(mLastLocation.getLongitude()+"");*/
+        }
+    };
+
+    private boolean checkPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        return false;
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(
+                this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                PERMISSION_ID
+        );
+    }
+
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+                LocationManager.NETWORK_PROVIDER
+        );
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            }
+        }
+    }
+    private long contador() {
+        RealmResults<Pago> result2 = realm.where(Pago.class).findAll();
+        return result2.size()+1;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (checkPermissions()) {
+            getLastLocation();
+        }
+
     }
 }
