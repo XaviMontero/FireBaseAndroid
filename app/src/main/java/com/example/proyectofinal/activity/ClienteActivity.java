@@ -116,30 +116,30 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
                             .show();
                     goToCompras();
                 }else{
-                    Toast.makeText(getApplicationContext(), "Error con Logitud  y latitud  " ,
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
-                }else{
                     if(validLatiLogit()){
-                    Pago pago = new Pago();
-                    pago.setId(contador());
-                    pago.setCedula(cedulaCliente.getText().toString());
-                    pago.setTotal(total);
-                    pago.setLatitud(latitud);
-                    pago.setLongitud(logitud);
-                    realm.beginTransaction();
-                    realm.insert(pago);
-                    realm.commitTransaction();
-                    Toast.makeText(getApplicationContext(), "Pago Con exito total es  " +total +latitud+" "+logitud,
-                            Toast.LENGTH_SHORT)
-                            .show();
-                    goToCompras();
-                }else{
+                        Pago pago = new Pago();
+                        pago.setId(contador());
+                        pago.setCedula(cedulaCliente.getText().toString());
+                        pago.setTotal(total);
+                        pago.setLatitud(latitud);
+                        pago.setLongitud(logitud);
+                        realm.beginTransaction();
+                        realm.insert(pago);
+                        realm.commitTransaction();
+                        Toast.makeText(getApplicationContext(), "Pago Con exito total es  " +total +latitud+" "+logitud,
+                                Toast.LENGTH_SHORT)
+                                .show();
+                        goToCompras();
+                    }else{
                         Toast.makeText(getApplicationContext(), "Error con Logitud  y latitud  " ,
                                 Toast.LENGTH_SHORT)
                                 .show();
                     }
+                }
+                }else{
+                    Toast.makeText(getApplicationContext(), "Error con Logitud  y latitud  " ,
+                            Toast.LENGTH_SHORT)
+                            .show();
                 }
                 break;
             case R.id.etBuscar:
@@ -243,9 +243,8 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
 
-
-          /* totales.setText(mLastLocation.getLatitude()+"");
-              lonTextView.setText(mLastLocation.getLongitude()+"");*/
+            latitud= mLastLocation.getLatitude();
+            logitud=mLastLocation.getLongitude();
         }
     };
 

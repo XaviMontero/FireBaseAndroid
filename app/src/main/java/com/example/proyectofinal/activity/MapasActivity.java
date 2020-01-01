@@ -41,29 +41,29 @@ public class MapasActivity extends AppCompatActivity  implements
     private static final String SOURCE_ID = "SOURCE_ID";
     private static final String ICON_ID = "ICON_ID";
     private static final String LAYER_ID = "LAYER_ID";
+    List<Feature> symbolLayerIconFeatureList ;
     private MapView mapView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Mapbox.getInstance(this, getString(R.string.access_token));
-
         setContentView(R.layout.activity_mapas);
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
+
+
+
+
+
+
         mapView.getMapAsync(this);
     }
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
 
-        List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
 
 
-        for(Pago getPago : getLogitLati()){
-             symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                    Point.fromLngLat(getPago.getLongitud(), getPago.getLatitud())));
-        }
-
-
+        symbolLayerIconFeatureList = getLogitLati();
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 
@@ -139,10 +139,13 @@ public class MapasActivity extends AppCompatActivity  implements
         mapView.onSaveInstanceState(outState);
     }
 
-    private RealmResults<Pago>   getLogitLati( ) {
+    private List<Feature>  getLogitLati( ) {
+        List<Feature> datos = new ArrayList<>();
         RealmResults<Pago> result2 = realm.where(Pago.class).findAll();
-
-
-        return result2 ;
+        for(Pago getPago : result2){
+            datos.add(Feature.fromGeometry(
+                    Point.fromLngLat(getPago.getLongitud(), getPago.getLatitud())));
+        }
+        return datos;
     }
 }
