@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/menu_cliente"
+        android:title="Clientes "
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_usuarios"
+        android:title="Usuarios "
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_productos"
+        android:title="Facturas "
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_pedidos"
+        android:title="Pedidos "
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_logout"
+        android:title="Salir"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_forget_logout"
+        android:title="Olvidar "
+        app:showAsAction="never" />
+</menu>
