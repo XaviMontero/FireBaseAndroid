@@ -1,6 +1,5 @@
-package com.example.proyectofinal.activity;
+package com.example.proyectofinal.actecar;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectofinal.R;
-import com.example.proyectofinal.adapter.MainAdapter;
 import com.example.proyectofinal.adapter.ProductoAdapter;
 import com.example.proyectofinal.app.MyApp;
 import com.example.proyectofinal.model.User;
@@ -25,11 +23,7 @@ import com.example.proyectofinal.modelo.producto.Producto;
 import com.example.proyectofinal.util.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +40,7 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
     private Producto producto;
     String email;
 
-
+    private MDToast mdToast;
     private RecyclerView.LayoutManager layoutManager;
     private List<Producto> list_usuarios = new ArrayList<Producto>();
     private RecyclerView recyclerView;
@@ -81,7 +75,9 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onItemClick(Producto fruit, int position) {
                 total =total+fruit.getProPre();
-                Toast.makeText(getApplicationContext(),"Producto agregado al carrito  "+fruit.getProNom()+""+ "total es "+ total, Toast.LENGTH_LONG).show();
+                 mdToast = MDToast.makeText(getApplicationContext(), "Producto  al carro  "+fruit.getProNom()+""+ "total es "+ total,  1000, 1);
+                mdToast.show();
+
             }
         });
 

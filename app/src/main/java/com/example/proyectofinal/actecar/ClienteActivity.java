@@ -1,4 +1,4 @@
-package com.example.proyectofinal.activity;
+package com.example.proyectofinal.actecar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.example.proyectofinal.R;
 import com.example.proyectofinal.model.Cliente;
 import com.example.proyectofinal.model.Pago;
-import com.example.proyectofinal.model.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;

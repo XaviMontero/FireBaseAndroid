@@ -5,27 +5,27 @@
 
     <item
         android:id="@+id/menu_cliente"
-        android:title="Clientes "
+        android:title="Asociados "
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_usuarios"
-        android:title="Usuarios "
+        android:title="Personal "
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_productos"
-        android:title="Facturas "
+        android:title="Ventas "
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_pedidos"
-        android:title="Pedidos "
+        android:title="Mapa "
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_logout"
-        android:title="Salir"
+        android:title="Buscar"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_forget_logout"
-        android:title="Olvidar "
+        android:title="Salir "
         app:showAsAction="never" />
 </menu>

@@ -1,4 +1,4 @@
-package com.example.proyectofinal.activity;
+package com.example.proyectofinal.actecar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,7 +9,6 @@ import android.widget.ListView;
 import com.example.proyectofinal.R;
 import com.example.proyectofinal.app.MyApp;
 
-import com.example.proyectofinal.model.User;
 import com.example.proyectofinal.modelo.cliente.Cliente;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class ListClienteActivity extends AppCompatActivity {
     private ArrayList<String> getNames() {
         ArrayList<String> datos= new ArrayList<>();
         for(Cliente user: MyApp.clientes){
-            datos.add("Nombre "+user.getCliNom() +" Cedula "+ user.getStrCedulaCliente());
+            datos.add( user.getCliNom() +" "+ user.getStrCedulaCliente());
 
         }
         return datos;

@@ -1,4 +1,4 @@
-package com.example.proyectofinal.activity;
+package com.example.proyectofinal.actecar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.proyectofinal.adapter.MainAdapter;
 import com.example.proyectofinal.R;
-import com.example.proyectofinal.app.MyApp;
 import com.example.proyectofinal.model.Producto;
 import com.example.proyectofinal.model.User;
 import com.example.proyectofinal.util.Util;

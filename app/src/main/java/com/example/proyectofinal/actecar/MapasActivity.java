@@ -1,17 +1,14 @@
-package com.example.proyectofinal.activity;
+package com.example.proyectofinal.actecar;
 
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectofinal.R;
-import com.example.proyectofinal.model.Cliente;
 import com.example.proyectofinal.model.Pago;
-import com.example.proyectofinal.model.User;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;

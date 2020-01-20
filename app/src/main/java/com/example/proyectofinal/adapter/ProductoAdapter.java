@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectofinal.R;
 
-import com.example.proyectofinal.activity.ProductosActivity;
 import com.example.proyectofinal.modelo.producto.Producto;
 
 

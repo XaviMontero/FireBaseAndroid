@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ProductosActivity">
+    android:padding="16dp"
+    tools:context=".actecar.ProductosActivity">
 
     <TextView
         android:id="@+id/user_main2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:textAppearance="@android:style/TextAppearance.Large"
@@ -24,10 +25,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recicle_view_producto"
-        android:layout_width="339dp"
-        android:layout_height="555dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="73dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="36dp"
         android:clickable="true"
@@ -35,7 +35,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_main2"
         tools:ignore="MissingConstraints" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

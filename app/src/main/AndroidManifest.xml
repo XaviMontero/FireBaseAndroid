@@ -14,14 +14,14 @@
         android:roundIcon="@mipmap/ic_lss_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ProductosActivity"></activity>
-        <activity android:name=".activity.PagosActivity" />
-        <activity android:name=".activity.MapasActivity" />
-        <activity android:name=".activity.ListClienteActivity" />
-        <activity android:name=".activity.ClienteActivity" />
-        <activity android:name=".activity.ListActivity" />
-        <activity android:name=".activity.UserActivity" />
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".actecar.ProductosActivity"></activity>
+        <activity android:name=".actecar.PagosActivity" />
+        <activity android:name=".actecar.MapasActivity" />
+        <activity android:name=".actecar.ListClienteActivity" />
+        <activity android:name=".actecar.ClienteActivity" />
+        <activity android:name=".actecar.ListActivity" />
+        <activity android:name=".actecar.UserActivity" />
+        <activity android:name=".actecar.MainActivity" />
         <activity
             android:name=".util.SplashScreenActivity"
             android:theme="@style/SplashScreen">
@@ -31,7 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".actecar.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

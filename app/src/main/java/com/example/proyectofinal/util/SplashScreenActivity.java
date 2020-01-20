@@ -8,9 +8,8 @@ import android.text.TextUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.proyectofinal.activity.LoginActivity;
-import com.example.proyectofinal.activity.MainActivity;
-import com.example.proyectofinal.activity.ProductosActivity;
+import com.example.proyectofinal.actecar.LoginActivity;
+import com.example.proyectofinal.actecar.ProductosActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
