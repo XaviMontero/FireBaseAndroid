@@ -47,5 +47,5 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        app:srcCompat="@android:drawable/ic_dialog_dialer" />
 </androidx.constraintlayout.widget.ConstraintLayout>

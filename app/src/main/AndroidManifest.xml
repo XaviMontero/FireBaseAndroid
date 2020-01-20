@@ -9,9 +9,9 @@
     <application
         android:name=".app.MyApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ucacue"
+        android:icon="@mipmap/ic_lss_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ucacue"
+        android:roundIcon="@mipmap/ic_lss_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.ProductosActivity"></activity>
