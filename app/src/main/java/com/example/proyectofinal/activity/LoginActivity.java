@@ -39,6 +39,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
-
+    private MDToast mdToast;
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
@@ -89,8 +90,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         call();
         builCredenciales();
         google();
-        Toast.makeText(this,"Los productos registrados son  " +String.valueOf(MyApp.productos.size()),Toast.LENGTH_LONG).show();
-        Toast.makeText(this,"Los Clientes registrados son  "+ String.valueOf(MyApp.clientes.size()),Toast.LENGTH_LONG).show();
+        mdToast = MDToast.makeText(this, "Los productos registrados son  " +String.valueOf(MyApp.productos.size()) ,  1000, 2);
+        mdToast.show();
+        mdToast = MDToast.makeText(this, "Los Clientes registrados son  "+ String.valueOf(MyApp.clientes.size()) ,  1000, 2);
+        mdToast.show();
+
 
     }
 
@@ -150,9 +154,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void showBiometricPrompt() {
         BiometricPrompt.PromptInfo promptInfo =
                 new BiometricPrompt.PromptInfo.Builder()
-                        .setTitle("Biometric login for my app")
-                        .setSubtitle("Log in using your biometric credential")
-                        .setNegativeButtonText("Cancel")
+                        .setTitle("Universidad Catolica de cuenca ")
+                        .setSubtitle("Bienvenido hacerque su dedo con el lector biometrico")
+                        .setNegativeButtonText("Cancelar")
                         .build();
 
         BiometricPrompt biometricPrompt = new BiometricPrompt(LoginActivity.this,
@@ -162,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                               @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
                 Toast.makeText(getApplicationContext(),
-                        "Authentication error: " + errString, Toast.LENGTH_SHORT)
+                        "No reconocemos este usuario: " + errString, Toast.LENGTH_SHORT)
                         .show();
             }
 
@@ -182,14 +186,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     userReaml.setId(contador());
                     userReaml.setName("admin@admin.ec");
                     userReaml.setPass("admin");
-                    userReaml.setNombre("Administrador ");
+                    userReaml.setNombre("Cristian ");
                     realm.beginTransaction();
                     realm.insert(userReaml);
                     realm.commitTransaction();
 
-                    Toast.makeText(getApplicationContext(), "Cuenta de administrador creada ",
-                            Toast.LENGTH_SHORT)
-                            .show();
+
+
+                    mdToast = MDToast.makeText(getApplicationContext(), "Cuenta de administrador creada ",  1000, 1);
+                    mdToast.show();
                 }
 
 
@@ -202,7 +207,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                Toast.makeText(getApplicationContext(), "Authentication failed",
+                Toast.makeText(getApplicationContext(), "Autenticacion fallida",
                         Toast.LENGTH_SHORT)
                         .show();
             }

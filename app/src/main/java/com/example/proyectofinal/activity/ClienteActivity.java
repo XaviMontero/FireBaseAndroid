@@ -31,6 +31,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -48,7 +49,7 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
     private Double total;
     private Double latitud;
     private Double logitud;
-
+    MDToast mdToast;
 
     int PERMISSION_ID = 44;
     FusedLocationProviderClient mFusedLocationClient;
@@ -99,9 +100,10 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
                     realm.beginTransaction();
                     realm.insert(clienteGuardar);
                     realm.commitTransaction();
-                    Toast.makeText(getApplicationContext(), "Cuenta Creada  creada ",
-                            Toast.LENGTH_SHORT)
-                            .show();
+
+                      mdToast = MDToast.makeText(this, "Listo " ,  1000, 1);
+                    mdToast.show();
+
                     Pago pago = new Pago();
                          pago.setId(contador());
                         pago.setCedula(cedulaCliente.getText().toString());
@@ -111,9 +113,10 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
                         realm.beginTransaction();
                         realm.insert(pago);
                         realm.commitTransaction();
-                    Toast.makeText(getApplicationContext(), "Pago Con exito total es  " +latitud+" "+logitud,
-                            Toast.LENGTH_SHORT)
-                            .show();
+
+                      mdToast = MDToast.makeText(this, "Pago Con exito total es " ,  1000, 1);
+                    mdToast.show();
+
                     goToCompras();
                 }else{
                     if(validLatiLogit()){
@@ -126,9 +129,10 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
                         realm.beginTransaction();
                         realm.insert(pago);
                         realm.commitTransaction();
-                        Toast.makeText(getApplicationContext(), "Pago Con exito total es  " +total +latitud+" "+logitud,
-                                Toast.LENGTH_SHORT)
-                                .show();
+
+                        mdToast = MDToast.makeText(this, "Pago Con exito total es  " +total +latitud+" "+logitud,  1000, 1);
+                        mdToast.show();
+
                         goToCompras();
                     }else{
                         Toast.makeText(getApplicationContext(), "Error con Logitud  y latitud  " ,
@@ -176,8 +180,9 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
             telefonoCliente.setText(retorno.getTelefono());
 
         }else{
-            Toast.makeText(this,"El cliente no exite llene los datos",Toast.LENGTH_LONG).show();
-        }
+            mdToast = MDToast.makeText(this, "Datos en blanco " +total +latitud+" "+logitud,  1000, 2);
+            mdToast.show();
+         }
     }
 
     private boolean buscarCliente(String cedula) {
