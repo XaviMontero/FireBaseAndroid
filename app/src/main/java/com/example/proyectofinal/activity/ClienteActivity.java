@@ -161,7 +161,7 @@ public class ClienteActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void goToCompras() {
-        Intent myIntent = new Intent(this, MainActivity.class);
+        Intent myIntent = new Intent(this, ProductosActivity.class);
         myIntent.putExtra("total",0.0);
         startActivity(myIntent);
     }

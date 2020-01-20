@@ -16,11 +16,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.proyectofinal.adapter.MainAdapter;
 import com.example.proyectofinal.R;
+import com.example.proyectofinal.adapter.MainAdapter;
+import com.example.proyectofinal.adapter.ProductoAdapter;
 import com.example.proyectofinal.app.MyApp;
-import com.example.proyectofinal.model.Producto;
 import com.example.proyectofinal.model.User;
+import com.example.proyectofinal.modelo.producto.Producto;
 import com.example.proyectofinal.util.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,11 +32,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProductosActivity extends AppCompatActivity implements View.OnClickListener {
 
     private User userReaml;
     private Realm realm =Realm.getDefaultInstance();
@@ -43,115 +45,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textView;
     private Producto producto;
     String email;
-    private DatabaseReference mDatabase;// ...
+
 
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<Producto> list_usuarios = new ArrayList<Producto>();
+    private List<Producto> list_usuarios = new ArrayList<Producto>();
     private RecyclerView recyclerView;
-    public MainAdapter mainAdapter;
+    public ProductoAdapter mainAdapter;
     private Double total = 0.0;
     private FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("productos");
 
 
-
-
-    /*   producto=new Producto();
-        producto.setId("skjghjgfkjljhugfbf");
-        producto.setDescripcion("Caldo Magui para las sopas de familia  ");
-        producto.setNombre("Caldo magi ");
-        producto.setUrl("https://www.nestle.com.ve/sites/g/files/pydnoa526/files/asset-library/publishingimages/productos/maggi/productos/cubito%20de%20pollo%2092g_3-4.jpg");
-        producto.setPrecio(0.5);
-        mDatabase.child(producto.getId()).setValue(producto);*/
-
-
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_productos);
 
         userReaml= new User();
-        textView = findViewById(R.id.user_main);
+        textView = findViewById(R.id.user_main2);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         email = Util.getUserMailPrefs(prefs);
         userReaml= getUser(email);
         textView.setText("Binvenido: "+userReaml.getNombre());
 
 
-        ValueEventListener userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Producto users = snapshot.getValue(Producto.class);
-
-                     if ( !removerId(users.getId())){
-                         list_usuarios.add(users);
+        list_usuarios= MyApp.productos;
 
 
-                     }else{
-                         list_usuarios.remove(removerIdEli(users.getId()));
-                         list_usuarios.add(users);
-                     }
-                    mainAdapter.notifyDataSetChanged();
-                }
-                //tuAdapter.notifyDataSetChanged();
-            }
 
-            private boolean removerId(String id) {
-                int i =0;
-               for (Producto p : list_usuarios){
-                   if(p.getId().equals(id)){
-                       return true;
-                   }
-                   i++;
-               }
-               return false;
-            }
-
-            private int removerIdEli(String id) {
-                int i =0;
-                for (Producto p : list_usuarios){
-                    if(p.getId().equals(id)){
-                        return i;
-                    }
-                    i++;
-                }
-                return i;
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-
-
-        mDatabase.addValueEventListener(userListener);
-        recyclerView = findViewById(R.id.recicle_view);
+        recyclerView = findViewById(R.id.recicle_view_producto);
         layoutManager = new LinearLayoutManager(this);
         // Observa como pasamos el activity, con this. Podríamos declarar
         // Activity o Context en el constructor y funcionaría pasando el mismo valor, this
-        mainAdapter = new MainAdapter(list_usuarios, R.layout.card_view, this, new MainAdapter.OnItemClickListener() {
+        mainAdapter = new ProductoAdapter(list_usuarios, R.layout.card_view_producto, this, new ProductoAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Producto fruit, int position) {
-                total =total+fruit.getPrecio();
-                Toast.makeText(getApplicationContext(),"Producto agregado al carrito  "+fruit.getNombre()+""+ "total es "+ total, Toast.LENGTH_LONG).show();
+                total =total+fruit.getProPre();
+                Toast.makeText(getApplicationContext(),"Producto agregado al carrito  "+fruit.getProNom()+""+ "total es "+ total, Toast.LENGTH_LONG).show();
             }
         });
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mainAdapter);
-        fab= findViewById(R.id.floatingActionButton2);
+        fab= findViewById(R.id.floatingActionButton3);
         fab.setOnClickListener(this);
+        mainAdapter.notifyDataSetChanged();
 
     }
 
     private User getUser(String email) {
 
-            RealmResults<User> result2 = realm.where(User.class).equalTo("name",email).findAll();
-            return result2.get(0);
+        RealmResults<User> result2 = realm.where(User.class).equalTo("name",email).findAll();
+        return result2.get(0);
 
     }
 
@@ -172,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 return true;
             case R.id.menu_forget_logout:
-              cerrar();
+                cerrar();
                 return true;
             case R.id.menu_usuarios:
                 usuariosActivity();
@@ -223,20 +169,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void usuariosActivity() {
         Intent intent = new Intent(this, ListActivity.class);
-         startActivity(intent);
+        startActivity(intent);
     }
 
     @Override
     public void onClick(View v) {
-         if(total!= 0.0){
-             Intent myIntent = new Intent(this, ClienteActivity.class);
-             myIntent.putExtra("total",total);
-             startActivity(myIntent);
+        if(total!= 0.0){
+            Intent myIntent = new Intent(this, ClienteActivity.class);
+            myIntent.putExtra("total",total);
+            startActivity(myIntent);
             total =0.0;
 
-         } else{
-             Toast.makeText(getApplicationContext(),"No a ingresado nigun producto al carrito", Toast.LENGTH_LONG).show();
+        } else{
+            Toast.makeText(getApplicationContext(),"No a ingresado nigun producto al carrito", Toast.LENGTH_LONG).show();
 
-         }
+        }
     }
 }

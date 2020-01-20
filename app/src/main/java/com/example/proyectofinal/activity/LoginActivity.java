@@ -22,7 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectofinal.R;
+import com.example.proyectofinal.app.MyApp;
 import com.example.proyectofinal.model.User;
+import com.example.proyectofinal.modelo.PostService;
+import com.example.proyectofinal.modelo.producto.Producto;
 import com.example.proyectofinal.util.Util;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -37,10 +40,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView registrar;
@@ -63,6 +73,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
+
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
@@ -78,8 +89,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         call();
         builCredenciales();
         google();
+        Toast.makeText(this,"Los productos registrados son  " +String.valueOf(MyApp.productos.size()),Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"Los Clientes registrados son  "+ String.valueOf(MyApp.clientes.size()),Toast.LENGTH_LONG).show();
 
     }
+
+
 
     private void google() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -258,7 +273,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void goToMain() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ProductosActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

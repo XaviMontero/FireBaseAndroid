@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectofinal.activity.LoginActivity;
 import com.example.proyectofinal.activity.MainActivity;
+import com.example.proyectofinal.activity.ProductosActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         Intent intentLogin = new Intent(this, LoginActivity.class);
-        Intent intentMain = new Intent(this, MainActivity.class);
+        Intent intentMain = new Intent(this, ProductosActivity.class);
 
         if (!TextUtils.isEmpty(Util.getUserMailPrefs(prefs)) &&
                 !TextUtils.isEmpty(Util.getUserPassPrefs(prefs))) {
