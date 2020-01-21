@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private User userReaml;
     private Realm realm =Realm.getDefaultInstance();
     private SharedPreferences prefs;
-    private TextView textView;
+
     private Producto producto;
     String email;
     private DatabaseReference mDatabase;// ...
@@ -71,11 +71,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         userReaml= new User();
-        textView = findViewById(R.id.user_main);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         email = Util.getUserMailPrefs(prefs);
         userReaml= getUser(email);
-        textView.setText("Binvenido: "+userReaml.getNombre());
 
 
         ValueEventListener userListener = new ValueEventListener() {
@@ -238,4 +236,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
          }
     }
+
+
 }

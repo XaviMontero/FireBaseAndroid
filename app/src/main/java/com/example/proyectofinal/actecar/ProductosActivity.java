@@ -19,6 +19,7 @@ import com.example.proyectofinal.R;
 import com.example.proyectofinal.adapter.ProductoAdapter;
 import com.example.proyectofinal.app.MyApp;
 import com.example.proyectofinal.model.User;
+import com.example.proyectofinal.modelo.cliente.Cliente;
 import com.example.proyectofinal.modelo.producto.Producto;
 import com.example.proyectofinal.util.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -87,6 +88,20 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
         fab= findViewById(R.id.floatingActionButton3);
         fab.setOnClickListener(this);
         mainAdapter.notifyDataSetChanged();
+
+
+        if (getProducto().size()< 100 ){
+            for(Producto user: MyApp.productos){
+                com.example.proyectofinal.model.Producto clie = new com.example.proyectofinal.model.Producto();
+                clie.setId(user.getProCod());
+                clie.setNombre(user.getProNom());
+                clie.setDescripcion(String.valueOf(user.getProPre()));
+                clie.setUrl("data");
+                realm.beginTransaction();
+                realm.insert(clie);
+                realm.commitTransaction();
+            }
+        }
 
     }
 
@@ -180,5 +195,12 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(getApplicationContext(),"No a ingresado nigun producto al carrito", Toast.LENGTH_LONG).show();
 
         }
+    }
+
+    private RealmResults<com.example.proyectofinal.model.Producto> getProducto( ) {
+
+        RealmResults<com.example.proyectofinal.model.Producto> result2 = realm.where(com.example.proyectofinal.model.Producto.class).findAll();
+        return result2;
+
     }
 }
