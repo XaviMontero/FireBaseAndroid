@@ -8,34 +8,33 @@
 
     <TextView
         android:id="@+id/user_main2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="261dp"
+        android:layout_height="0dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textColor="@color/colorPrimary"
         android:textStyle="normal|bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.054" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recicle_view_producto"
-        android:layout_width="339dp"
-        android:layout_height="555dp"
+        android:layout_width="381dp"
+        android:layout_height="474dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="73dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="36dp"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_main2"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -48,4 +47,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/btn_star_big_on" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

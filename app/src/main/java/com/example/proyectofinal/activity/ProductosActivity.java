@@ -3,6 +3,7 @@ package com.example.proyectofinal.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import com.example.proyectofinal.adapter.MainAdapter;
 import com.example.proyectofinal.adapter.ProductoAdapter;
 import com.example.proyectofinal.app.MyApp;
 import com.example.proyectofinal.model.User;
+import com.example.proyectofinal.modelo.cliente.Cliente;
 import com.example.proyectofinal.modelo.producto.Producto;
 import com.example.proyectofinal.util.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -45,6 +48,10 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
     private TextView textView;
     private Producto producto;
     String email;
+    private EditText codigoProductos;
+    private EditText precioProducto;
+    private TextView buscarProducto;
+
 
 
     private RecyclerView.LayoutManager layoutManager;
@@ -74,7 +81,7 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
 
 
         recyclerView = findViewById(R.id.recicle_view_producto);
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager = new GridLayoutManager(this, 2);
         // Observa como pasamos el activity, con this. Podríamos declarar
         // Activity o Context en el constructor y funcionaría pasando el mismo valor, this
         mainAdapter = new ProductoAdapter(list_usuarios, R.layout.card_view_producto, this, new ProductoAdapter.OnItemClickListener() {
@@ -91,6 +98,19 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
         fab= findViewById(R.id.floatingActionButton3);
         fab.setOnClickListener(this);
         mainAdapter.notifyDataSetChanged();
+
+        if (getPass().size()< 100 ){
+            for(Producto user: MyApp.productos){
+                com.example.proyectofinal.model.Producto clie = new com.example.proyectofinal.model.Producto();
+                clie.setId(user.getProCod());
+                clie.setNombre(user.getProNom());
+                clie.setPrecio(user.getProPre());
+                clie.setUrl(user.getProFecExp());
+                realm.beginTransaction();
+                realm.insert(clie);
+                realm.commitTransaction();
+            }
+        }
 
     }
 
@@ -184,5 +204,12 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(getApplicationContext(),"No a ingresado nigun producto al carrito", Toast.LENGTH_LONG).show();
 
         }
+    }
+
+    private RealmResults<com.example.proyectofinal.model.Producto> getPass( ) {
+
+        RealmResults<com.example.proyectofinal.model.Producto> result2 = realm.where(com.example.proyectofinal.model.Producto.class).findAll();
+        return result2;
+
     }
 }

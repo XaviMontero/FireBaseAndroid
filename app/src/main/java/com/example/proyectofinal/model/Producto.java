@@ -1,7 +1,11 @@
 package com.example.proyectofinal.model;
 
-public class Producto {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Producto extends RealmObject {
     public static  Double LIMIT_QUANTITY= 10.0;
+    @PrimaryKey
     private String id;
     private String nombre;
     private Double precio;
