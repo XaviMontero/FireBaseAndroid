@@ -1,6 +1,9 @@
 package com.example.proyectofinal.app;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.SystemClock;
 import android.widget.Toast;
 
@@ -34,15 +37,32 @@ public class MyApp extends Application {
         RealmConfiguration config = new RealmConfiguration.Builder().name("myrealm.realm").build();
         Realm.setDefaultConfiguration(config);
         // Este es solo para poder ver el Splash Screen durante 3 segundos
-        getPosts();
-        getPostsCliente();
-            SystemClock.sleep(26000);
+       if (permisos()) {
+           getPosts();
+           getPostsCliente();
+           SystemClock.sleep(3000);
+           Toast.makeText(getApplicationContext(),"Con permisos", Toast.LENGTH_LONG).show();
+
+       }else {
+           Toast.makeText(getApplicationContext(),"Sin permisos", Toast.LENGTH_LONG).show();
+
+       }
+
 
 
 
 }
 
-    private void getPosts() {
+    private boolean permisos() {
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork.isConnectedOrConnecting();
+        return isConnected;
+    }
+
+    public void getPosts() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -54,9 +74,6 @@ public class MyApp extends Application {
             @Override
             public void onResponse(Call<List<Producto>> call, Response<List<Producto>> response) {
                 productos= response.body();
-
-
-
             }
 
             @Override
@@ -77,9 +94,6 @@ public class MyApp extends Application {
             @Override
             public void onResponse(Call<List<Cliente>> call, Response<List<Cliente>> response) {
                 clientes= response.body();
-
-
-
             }
 
             @Override

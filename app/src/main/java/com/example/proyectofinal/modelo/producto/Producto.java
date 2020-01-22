@@ -1,6 +1,5 @@
 package com.example.proyectofinal.modelo.producto;
 
-import io.realm.RealmObject;
 
 public class Producto   {
     private String ProCod;

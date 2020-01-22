@@ -7,6 +7,8 @@ import androidx.biometric.BiometricPrompt;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -23,6 +25,10 @@ import android.widget.Toast;
 import com.example.proyectofinal.R;
 import com.example.proyectofinal.app.MyApp;
 import com.example.proyectofinal.model.User;
+import com.example.proyectofinal.modelo.ClienService;
+import com.example.proyectofinal.modelo.PostService;
+import com.example.proyectofinal.modelo.cliente.Cliente;
+import com.example.proyectofinal.modelo.producto.Producto;
 import com.example.proyectofinal.util.Util;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -38,10 +44,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView registrar;
@@ -63,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ImageView ivFacebook;
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
+    String API_BASE_URL="http://174.142.32.198/invent_web_api/api/";
 
     private MDToast mdToast;
     // [START declare_auth]
@@ -75,15 +88,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        getPosts();
+        getPostsCliente();
         reference();
         call();
         builCredenciales();
         google();
-        mdToast = MDToast.makeText(this, "Los productos registrados son  " +String.valueOf(MyApp.productos.size()) ,  1000, 2);
-        mdToast.show();
-        mdToast = MDToast.makeText(this, "Los Clientes registrados son  "+ String.valueOf(MyApp.clientes.size()) ,  1000, 2);
-        mdToast.show();
+
+        if( permisos()){
+            mdToast = MDToast.makeText(this, "Los productos registrados son  " +String.valueOf(MyApp.productos.size()) ,  1000, 2);
+            mdToast.show();
+            mdToast = MDToast.makeText(this, "Los Clientes registrados son  "+ String.valueOf(MyApp.clientes.size()) ,  1000, 2);
+            mdToast.show();
+        }
+
 
 
     }
@@ -186,6 +204,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     mdToast = MDToast.makeText(getApplicationContext(), "Cuenta de administrador creada ",  1000, 1);
                     mdToast.show();
                 }
+
+
 
 
 
@@ -394,8 +414,58 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
+    private boolean permisos() {
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork.isConnectedOrConnecting();
+        return isConnected;
+    }
 
 
+    public void getPosts() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        PostService postService = retrofit.create(PostService.class);
+        Call<List<Producto>> call = postService.getPost();
+
+        call.enqueue(new Callback<List<Producto>>() {
+            @Override
+            public void onResponse(Call<List<Producto>> call, Response<List<Producto>> response) {
+                MyApp.productos= response.body();
+            }
+
+            @Override
+            public void onFailure(Call<List<Producto>> call, Throwable t) {
+            }
+        });
+    }
+
+    private void getPostsCliente() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ClienService postService = retrofit.create(ClienService.class);
+        Call<List<Cliente>> call = postService.getPost();
+
+        call.enqueue(new Callback<List<Cliente>>() {
+            @Override
+            public void onResponse(Call<List<Cliente>> call, Response<List<Cliente>> response) {
+                MyApp.clientes= response.body();
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Cliente>> call, Throwable t) {
+            }
+        });
+    }
 }
 
 
