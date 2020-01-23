@@ -136,6 +136,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(Producto fruit, int position) {
                 total =total+fruit.getPrecio();
+
+                Intent myIntent = new Intent(getApplicationContext(), ClienteActivity.class);
+                myIntent.putExtra("total",total);
+                startActivity(myIntent);
+                total =0.0;
                 Toast.makeText(getApplicationContext(),"Producto agregado al carrito  "+fruit.getNombre()+""+ "total es "+ total, Toast.LENGTH_LONG).show();
             }
         });
