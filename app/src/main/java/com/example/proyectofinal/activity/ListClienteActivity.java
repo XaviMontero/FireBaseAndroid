@@ -22,8 +22,7 @@ public class ListClienteActivity extends AppCompatActivity {
     private ListView listview;
     private ArrayList<String> names;
     private Realm realm =Realm.getDefaultInstance();
-
-    @Override
+     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_cliente);
